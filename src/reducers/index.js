@@ -1,7 +1,13 @@
 // provided by redux to combine reducers
 import { combineReducers} from 'redux';
 
-import {ADD_MOVIES,ADD_FAVOURITES,REMOVE_FAVOURITES,SET_SHOW_FAVOURITES} from '../actions/index';
+import {
+    ADD_MOVIES,ADD_FAVOURITES,
+    REMOVE_FAVOURITES,
+    SET_SHOW_FAVOURITES,
+    ADD_SEARCH_RESULT,
+    ADD_MOVIE_TO_LIST
+} from '../actions/index';
 
 const initialMoviesState={
     list:[],
@@ -41,6 +47,12 @@ export function movies(state=initialMoviesState,action){   //if nothing is passe
                 showFavourites:action.val
             }
 
+        case ADD_MOVIE_TO_LIST:
+            return {
+                ...state,
+                list: [action.movie,...state.list]
+            }
+
         default:
             return state;
     }
@@ -50,19 +62,34 @@ export function movies(state=initialMoviesState,action){   //if nothing is passe
 
 //search reducer
 const initialSearchState={
-    result:{}
+    result:{},
+    showSearchResults:false
 }
 
 export function search(state=initialSearchState,action){
-    console.log("search Reducer");
-    return state;
+    // ADD_SEARCH_RESULT
+    switch(action.type){
+        case ADD_SEARCH_RESULT:
+            return{
+                ...state,
+                result:action.movie,
+                showSearchResults:true
+            }
+        case ADD_MOVIE_TO_LIST:
+            return {
+                ...state,
+                showSearchResults:false
+            }
+        default:
+            return state;
+    }
 }
 
 //root reducer containing both of above reducers
-const initialRootState={
-    movies:initialMoviesState,
-    search:initialSearchState
-}
+// const initialRootState={
+//     movies:initialMoviesState,
+//     search:initialSearchState
+// }
 
 // export default function rootReducer(state=initialRootState,action){
 //     console.log("Root Reducer");

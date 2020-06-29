@@ -8,7 +8,6 @@ class Navbar extends React.Component{
 		super(props);
 		//console.log(props);
 		this.state={
-			showSearchResults:true,
 			searchText:''
 		};
 	}
@@ -34,7 +33,9 @@ class Navbar extends React.Component{
 
 	render(){
 		// console.log(this.props);
-		const {showSearchResults}=this.state;
+		// const {showSearchResults}=this.state;
+		const {result,showSearchResults}=this.props.search;
+		// console.log("nav movie",result);
 		//console.log("navbar state",this.state);
 		return (
 		    <div className="nav">
@@ -45,10 +46,10 @@ class Navbar extends React.Component{
 					{showSearchResults && 
 						<div className="search-results">
 							<div className="search-result">
-								<img src={data[0].Poster} alt="search-pic"/>
+								<img src={result.Poster} alt="search-pic"/>
 								<div className="movie-info">
-									<span>{data[0].Title}</span>
-									<button onClick={()=> this.handleAddToMovies(data[0])}>
+									<span>{result.Title}</span>
+									<button onClick={()=> this.handleAddToMovies(result)}>
 										Add to Movies
 									</button>
 								</div>
