@@ -2,6 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {createStore,applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
 
 //files import
 import './index.css';
@@ -22,12 +23,25 @@ import rootReducer from './reducers';
 //more simpler way of writting logger middleware
 const logger=({dispatch,getState})=>(next)=>(action)=>{
     //logger middleware
-    console.log("ACTION TYPE= ",action.type);
+    if(typeof action !== 'function'){
+        console.log("ACTION TYPE= ",action.type);
+    }
     next(action)
 }
 
+// const thunk=({dispatch,getState})=>(next)=>(action)=>{
+//     //thunk middleware
+//     if(typeof action === 'function'){
+//         action(dispatch);
+//         return;
+//     }
+//     next(action)
+// }
+
+
+
 //creating store
-const store=createStore(rootReducer,applyMiddleware(logger));
+const store=createStore(rootReducer,applyMiddleware(logger,thunk));
 
 console.log("store",store);
 // console.log("BEFORE STATE",store.getState());
