@@ -1,6 +1,8 @@
 import React from 'react';
-import {data} from '../data';
+// import {data} from '../data';
 import {addMovieToList,handleMovieSearch} from '../actions';
+import {StoreContext} from '../index';
+
 
 class Navbar extends React.Component{
 
@@ -34,7 +36,7 @@ class Navbar extends React.Component{
 	render(){
 		// console.log(this.props);
 		// const {showSearchResults}=this.state;
-		const {result,showSearchResults}=this.props.search;
+		const {result:movie,showSearchResults}=this.props.search;
 		// console.log("nav movie",result);
 		//console.log("navbar state",this.state);
 		return (
@@ -46,10 +48,10 @@ class Navbar extends React.Component{
 					{showSearchResults && 
 						<div className="search-results">
 							<div className="search-result">
-								<img src={result.Poster} alt="search-pic"/>
+								<img src={movie.Poster} alt="search-pic"/>
 								<div className="movie-info">
-									<span>{result.Title}</span>
-									<button onClick={()=> this.handleAddToMovies(result)}>
+									<span>{movie.Title}</span>
+									<button onClick={()=> this.handleAddToMovies(movie)}>
 										Add to Movies
 									</button>
 								</div>
@@ -61,7 +63,20 @@ class Navbar extends React.Component{
 		    </div>
 		);
 	}
-  
 }
 
-export default Navbar;
+
+//context api used to pass store
+class NavbarWrapper extends React.Component{
+  render(){
+    return(
+      <StoreContext.Consumer>
+        {(store)=>{
+          return <Navbar dispatch={store.dispatch} search={this.props.search}/>
+        }}
+      </StoreContext.Consumer>
+    );
+  }
+}
+
+export default NavbarWrapper;

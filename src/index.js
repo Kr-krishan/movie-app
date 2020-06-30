@@ -1,5 +1,5 @@
 // package import
-import React from 'react';
+import React, { createContext } from 'react';
 import ReactDOM from 'react-dom';
 import {createStore,applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
@@ -38,12 +38,24 @@ const logger=({dispatch,getState})=>(next)=>(action)=>{
 //     next(action)
 // }
 
-
-
 //creating store
 const store=createStore(rootReducer,applyMiddleware(logger,thunk));
 
 console.log("store",store);
+
+//context api
+export const StoreContext=createContext();
+console.log("storeContext",StoreContext);
+
+class Provider extends React.Component{
+	render(){
+		const {store}=this.props;
+		return <StoreContext.Provider value={store}>
+			{this.props.children}
+		</StoreContext.Provider>
+	}
+}
+
 // console.log("BEFORE STATE",store.getState());
 
 // store.dispatch({
@@ -53,6 +65,11 @@ console.log("store",store);
 
 // console.log("AFTER STATE",store.getState());
 
-ReactDOM.render(<App store={store} />,document.getElementById('root'));
+ReactDOM.render(
+	<Provider store={store}>
+		<App  />
+	</Provider>,
+	document.getElementById('root')
+);
 
 
